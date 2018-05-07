@@ -1,0 +1,5 @@
+#!/usr/bin/expect
+
+spawn ./catweigher
+expect "fdsfds"
+# expect "Cat Weighing System"
