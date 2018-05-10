@@ -74,9 +74,9 @@ Maybe not that last one. However, you will have to think of ways to test for the
 
 9. __Injection Errors__: A subset of Bad Data Errors, Injection Errors are when executable code or other instructions are passed in to a program.  If a program can be tricked into executing these instructions, the consequences can be dire, including loss or corruption of data, unauthorized access to a system, or simply causing the system to crash.
 
-    An especially common issue is not dealing with escapes or odd characters properly.  An escape code which is not caught by the interface that the data is entered in may be used by another subsystem that does recognize it, or vice-versa.  Characters may be used for different purposes by different subsystems or language.  For example, Java strings can have null characters inside of them, whereas a null character indicates "end of string" for C strings.
+    An especially common issue is not dealing with escapes or odd characters properly.  An escape code which is not caught by the interface that the data is entered in may be used by another subsystem that does recognize it, or vice-versa.  Characters may be used for different purposes by different subsystems or language.  For example, Ruby strings can have null characters inside of them, whereas a null character indicates "end of string" for C strings.
 
-    In order to test for these, determine what happens when various kinds of code are passed in to the program.  This doesn't have to be Java (or whatever language the system itself is written in).  A web application might execute JavaScript code on visitors' browsers.  Many systems use SQL for database updates and queries, and arbitrary SQL code can change or delete data.  The injected code could be assembly at the end of a long input---a trick often used to take advantage of a buffer overflow vulnerability (see the chapter on Security Testing for more information).  Checking all of these potential issues involves testing a wide variety of inputs, and there are adversaries who stand to gain personally from you missing a single point of entry for their malicious programs.
+    In order to test for these, determine what happens when various kinds of code are passed in to the program.  This doesn't have to be Ruby (or whatever language the system itself is written in).  A web application might execute JavaScript code on visitors' browsers.  Many systems use SQL for database updates and queries, and arbitrary SQL code can change or delete data.  The injected code could be assembly at the end of a long input---a trick often used to take advantage of a buffer overflow vulnerability (see the chapter on Security Testing for more information).  Checking all of these potential issues involves testing a wide variety of inputs, and there are adversaries who stand to gain personally from you missing a single point of entry for their malicious programs.
 
 10. __Network Errors__: Although computers are becoming more and more networked all the time, network connectivity is not yet ubiquitous or trouble-free.  The system should continue to work even if network connectivity is temporarily lost.  Some systems, of course, require network connectivity to work (running ssh or a web browser would be rather boring if you could not connect to any other systems), but they certainly should not crash or freeze without it.
 
@@ -90,13 +90,13 @@ Maybe not that last one. However, you will have to think of ways to test for the
 
 12. __Interface Errors__: Systems often need to communicate with other systems, and they will need some sort of interface to do so.  This interface may be more or less well-defined, from simply accepting text as input and providing text as output (such as with most Unix utilities such as `more` or `grep`) up to complex binary formats.  However, this interface does need to be defined at some level, and there exists the possibility that the definition is specified ambiguously, or different parts of the definition contradict each other, or each side of the interface team had different assumptions when creating it (see Errors of Assumption, above).  There also exists the possibility that it was just programmed incorrectly!
 
-    These interfaces do not have to be inter-process or inter-computer.  They can be as low-level as an interface between two classes.  The interface to a method is usually easy to understand; in Java, for instance, it's trivial to see what the following method accepts as arguments and what it outputs, even without comments:
+    These interfaces do not have to be inter-process or inter-computer.  They can be as low-level as an interface between two classes.  The interface to a method is usually easy to understand; in Ruby, for instance, it's trivial to see what the following method accepts as arguments and what it outputs, even without comments:
 
-    ```java
-    public boolean greaterThanTen(int a, int b) {
-        return (a + b) > 10;
-    }
-    ```
+```ruby
+def greater_than_ten(a, b)
+  (a + b) > 10
+end
+```
 
     In the previous instance, you can see that the method accepts two integers, and returns a Boolean.  It's also relatively easy to determine what the method does, even without comments.  Although it's always possible to write obfuscated code (intentionally or unintentionally), and rely on side effects and global variables, the average programmer's brain tends to be decent at understanding things at the method level.  As soon you go up to the class level, it can be more difficult to tell how things interoperate, and why.  No longer are you looking at the language itself, focusing on keywords like `for`, `if`, and `return` that are as familiar as your childhood blankie.  Instead, you are seeing a sort of "meta-language" of the class, which will be new to you.  You're working at a higher level of abstraction, and it gets even worse as you move up to higher and higher levels.  The cure is to define and design the interfaces well, but what may make sense to one person is likely to cause another to throw their hands up in despair.  Interfaces also tend to demarcate the line between developers or teams of developers.  Thus, they also mark a fertile ground for misunderstanding, and where there is misunderstanding, there too are defects.
 

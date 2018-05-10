@@ -8,11 +8,11 @@ What are unit tests?  In a nutshell, they test the smallest "units" of functiona
 
 Some examples of unit tests are checking that:
 
-1. A `.sort()` method returns `[1, 2, 3]` when you pass in `[3, 2, 1]`
-2. Passing in a null reference as an argument to a function throws an exception
-3. A `.formatNumber()` method returns a properly formatted number
-4. Passing in a string to a function that takes an integer argument does not crash the program
-5. An object has `.send()` and `.receive()` methods
+1. A `sort` method returns `[1, 2, 3]` when you pass in `[3, 2, 1]`
+2. Passing in a nil reference as an argument to a function throws an exception
+3. A `format_number` method returns a properly formatted number
+4. Passing in a string to a function that expects an integer argument does not crash the program
+5. An object has `send` and `receive` methods
 6. Constructing an object with default parameters sets the `default` attribute to true
 
 As you can see, these functions are all testing aspects of the software which are not directly visible to the end user.  A user is never going to be in the position of looking at a particular method or object.  They won't care about what methods an object has, or what value variables are set to, or what happens when a null pointer is passed in as an argument.  They will be able to see the _results_ of those things happening, of course, but they won't be able to specifically see the code that caused it.

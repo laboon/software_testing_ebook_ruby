@@ -90,40 +90,40 @@ In both cases, the execution steps will be the same, or at least very similar---
 
 Whereas preconditions are aspects of the system that are set before the test is run, __input values__ are those values passed directly in to the functionality under test.  This difference can be a subtle one, so let's explore a few examples.
 
-Imagine we have a sorting routine, `billSort`, which is estimated to be twenty times faster than any other sorting algorithm.  Rather than taking at face value `billSort`'s assertion that it will always produce the correct result, we are developing tests for it.  Our particular implementation uses a global variable, `SORT_ASCENDING`.  Depending on whether `SORT_ASCENDING` (a Boolean flag) is set to true or false, it will either sort ascending (from the lowest value to the highest---e.g., "a", "b", "c") or sort descending (from the highest value to the lowest---e.g., "c", "b", "a").  If we are going to test this sorting routine, setting the flag would count as a precondition, as this is something which needs to be set up before the test.  The array `["a", "c", "b"]` would be the input values; these values are sent directly in for testing.
+Imagine we have a sorting routine, `bill_sort`, which is estimated to be twenty times faster than any other sorting algorithm.  Rather than taking at face value `bill_sort`'s assertion that it will always produce the correct result, we are developing tests for it.  Our particular implementation uses a global variable, `SORT_ASCENDING`.  Depending on whether `SORT_ASCENDING` (a Boolean flag) is set to true or false, it will either sort ascending (from the lowest value to the highest---e.g., "a", "b", "c") or sort descending (from the highest value to the lowest---e.g., "c", "b", "a").  If we are going to test this sorting routine, setting the flag would count as a precondition, as this is something which needs to be set up before the test.  The array `["a", "c", "b"]` would be the input values; these values are sent directly in for testing.
 
 Another way to think of the difference between input values and preconditions is thinking of the tests as methods.  This is probably a good exercise for you to do anyway---we'll definitely be doing more of it when we get to the chapter on unit tests!
 
-```java
-public boolean testArraySort() {
+```ruby
+def test_array_sort
 
-    // PRECONDITIONS
-    SORT_ASCENDING = true;
+  # PRECONDITIONS
+  SORT_ASCENDING = true;
 
-    // INPUT VALUES
-    int[] vals = [1, 2, 3];
+  # INPUT VALUES
+  vals = [1, 2, 3]
 
-    // New, improved billSort method! :)
-    billSorted = billSort(vals);
+  # New, improved bill_sort method! :)
+  bill_sorted = bill_sort(vals)
 
-    // Old, busted built-in Java sort. :(
-    normalSorted = Arrays.sort(vals);
+  # Old, busted built-in Ruby sort. :(
+  default_sorted = vals.sort
 
-    // If the arrays are equal, then true is returned and the test passes
-    // Otherwise, false is returned, and the test fails
-    
-    return Arrays.equals(billSorted, normalSorted));
+  # If the arrays are equal, then true is returned and the test passes
+  # Otherwise, false is returned, and the test fails
+
+  bill_sorted == normal_sorted
     
 }
 ```
 
-Note that because you aren't sending the `SORT_ASCENDING` flag in to the functionality under test (specifically, the `billSort()` method), then it is not considered an input value.  However, the `vals` array is passed in to the `billSort()` method, so it is considered an input value.
+Note that because you aren't sending the `SORT_ASCENDING` flag in to the functionality under test (specifically, the `bill_sort` method), then it is not considered an input value.  However, the `vals` array is passed in to the `bill_sort` method, so it is considered an input value.
 
-Isn't it possible to redesign the system so as to send in the flag as an argument to the `billSort()` method, though?
+Isn't it possible to redesign the system so as to send in the flag as an argument to the `bill_sort` method, though?
 
-```java
-    // Arguments = values array, SORT_ASCENDING flag
-    billSorted = billSort(vals, true);
+```ruby
+    # Arguments = values array, SORT_ASCENDING flag
+    bill_sorted = bill_sort vals, true
 ```
 
 This is certainly possible, and in this case one could consider `SORT_ASCENDING` an input value as opposed to a precondition.  Whether something is a precondition or an input value often depends on the implementation of a program.  If we were writing this in a language such as Haskell, for example, where side effects for most functions are extremely limited, functions such as this would almost never have any preconditions other than 'the program is running'.
@@ -195,25 +195,25 @@ Developing test cases for non-functional requirements (quality attributes) of th
 
 Unfortunately, simply having a correspondence between all requirements and a test case for each does not always mean that you have developed a good test plan.  You may have to add additional tests to ensure that requirements work together in tandem, or check for cases from the user's point of view that may not map directly to requirements or flow directly from them.  Even more importantly, you will need to gain an understanding of the context that the software exists in.  Having domain knowledge of the field can help you understand basic use cases, how the system interacts with the environment, possible failure modes, and how users would expect the system to recover from those failure modes.  If nobody on the team understands the domain of the software, it may be worthwhile to discuss the software with a subject matter expert (SME) before writing a test plan.
 
-Understanding the programming environment that the software is written in can also facilitate writing a test plan.  Although this technically veers into grey-box testing as opposed to black-box testing, since you as a tester will know some of the internal implementation details, it can provide valuable insight in knowing where potential errors may lurk.  Allow me to give an example.  In Java, dividing by zero, as in the code below, will throw a `java.lang.ArithmeticException`:
+Understanding the programming environment that the software is written in can also facilitate writing a test plan.  Although this technically veers into grey-box testing as opposed to black-box testing, since you as a tester will know some of the internal implementation details, it can provide valuable insight in knowing where potential errors may lurk.  Allow me to give an example.  In Ruby, dividing by zero, as in the code below, will raise a `ZeroDivisionError`:
 
-```java
-int a = 7 / 0;
+```ruby
+a = 7 / 0
 ```
 
 No matter what the dividend is, if the divisor is 0, a  `java.lang.ArithmeticException` is throw.
 
-```java
-// All of these statements cause the same exception to be thrown
+```ruby
+# All of these statements cause the same exception to be thrown
 
-int b = -1 / 0;
+b = -1 / 0
 
-int c = 0 / 0;
+c = 0 / 0
 
-int d = 999999 / 0;
+d = 999999 / 0
 ```
 
-Therefore, when testing a program written in Java, you can assume that dividing by zero is essentially one equivalence class; if it occurs, then the same event should happen afterwards, whatever that event happens to be (e.g., perhaps the exception is caught and the message "Error Divide by Zero" is printed to the console).
+Therefore, when testing a program written in Ruby, you can assume that dividing by zero is essentially one equivalence class; if it occurs, then the same event should happen afterwards, whatever that event happens to be (e.g., perhaps the exception is caught and the message "Error Divide by Zero" is printed to the console).
 
 JavaScript (yes, technically I mean ECMAScript 5, for anyone who wants to know the particulars) does not throw an exception when dividing by zero.  However, depending on the numerator, when the denominator is zero, you may get different results!
 

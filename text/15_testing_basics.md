@@ -56,24 +56,25 @@ The boundary values are -1 and 0; they are the dividing line between the two equ
 
 Now that we understand what boundary and interior values are, one might ask, why is it the case that the boundaries are more likely to be defective?  The reason is that it is much more likely for code to have an error near a boundary because equivalence classes are so close.  Let's consider an example of the absolute value function:
 
-```java
-public static int absoluteValue (int x) {
-    if ( x > 1 ) {
-        return x;
-    } else {
-        return -x;
-    }
+```ruby
+def absolute_value (x) 
+  if x > 1
+    x
+  else
+    -x
+  end
 }
 ```
 
 Did you see the coding error?  There's a simple off-by-one error in the first line of the method.  Since it's checking if the argument x is greater than one, sending in the input value 1 will return -1.  Since boundary values are often explicitly mentioned in code, that's more reason for them to potentially fail or be put into the "wrong" equivalence class.  Let's rewrite it correctly, now that we have found the error:
 
-```java
-public static int absoluteValue (int x) {
-    if ( x >= 1 ) {
-        return x;
-    } else {
-        return -x;
+```ruby
+def absolute_value (x) 
+  if x >= 1
+    x
+  else
+    -x
+  end
 }
 ```
 
@@ -170,27 +171,25 @@ A static test, by contrast, does not execute the code.  Rather, it attempts to t
 
 At first glance, the benefit of static testing may not be obvious.  After all, how can testing software without executing it provide any additional benefits?  It's as though you're deliberately removing yourself from the direct effects and looking at it from "one step away".  However, since static analysis looks directly at the code, instead of at the results of the code executing, it can help to find issues of quality in the code itself.
 
-As an example, let's consider the following two methods, both of which accept a string `toChirp` and append the string `CHIRP!` to the end of it.  For example, passing in the value `foo` will return `fooCHIRP!` for each method:
+As an example, let's consider the following two methods, both of which accept a string `to_chirp` and append the string `CHIRP!` to the end of it.  For example, passing in the value `foo` will return `fooCHIRP!` for each method:
 
-```java
-public String chirpify(String toChirp) {
-    return toChirp + "CHIRP!";
+```ruby
+def chirpify (to_chirp) {
+    to_chirp + "CHIRP!"
 }
 ```
 
-```java
-public String chirpify(String toChirp) {
-       char[] blub = toChirp.toCharArray();
-       char[] blub2 = new char[6];
-       blub2[0] = (char) 0x43;
-       blub2[1] = (char) 0110;
-       blub2[2] = (char) 73;
-       blub2[3] = (char) (0123 - 1);
-       blub2[4] = (char) (40 * 2);
-       blub2[5] = '!';
-       String boxer99 = new String(blub).concat(new String(blub2));
-       return boxer99;
-}
+```ruby
+def chirpify (to_chirp)
+  a = to_chirp.chars.to_a.len
+  to_chirp[a] = 67.chr
+  to_chirp[a + 1] = ("I".ord - 1).chr
+  to_chirp += "irp".upcase.chars.join.to_s
+  to_chirp[to_chirp.size] = ['!'.ord].map { |x| x.chr }
+  to_chirp
+end
 ```
 
 Both of these will return the same result for a given input.  The output of both can be observed via dynamic tests, and checked against expected values.  However, would anyone argue that the second method is superior?  It's overly complex; it's difficult to understand what it does; the variable names are meaningless.  Finding all that is wrong with the code is left as an exercise for the reader.  With dynamic tests, it may be difficult or impossible to determine any difference between the two methods.  However, using static testing methods such as code review, it's trivial to find issues in the second method.
+
+Static tests are often much better at gauging __internal quality__ (the quality of the codebase itself, such as the ability to be refactored, scaled, understood by new users, etc.) as opposed to testing __external quality__ (the quality of the system as it is seen by users).  Generally speaking, internal quality manifests itself in external quality.  A codebase which is easy to understand and modify will result in developers updating the code and adding features in a way which improves upon the quality attributes of the system.  Quality analysts often review the external quality of the system, but it is important to note that when viewed holistically, internal quality may be of even greater importance than external quality.  While few users will be upset because of a poorly-named variable or overly complex function --- the usually will have no way of knowing that these even exist! --- users may be upset when it takes much longer for new features to appear because developers have trouble modifying or understanding the existing codebase.
