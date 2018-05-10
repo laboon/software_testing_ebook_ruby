@@ -55,19 +55,17 @@ We can see that there are three steps here, which correspond to some of the step
 
 It would be entirely possible to unit test this in a "manual" fashion.  Just generate a quick program which creates a linked list _a_, creates a linked list _b_, applies the equality operator to both of them, and finally checks if the result of that value is true.  If it is, print out "test passed!"; otherwise, print out "test failed!".  However, usually we use a testing framework to automate much of the work and ensure that we are testing in a consistent and coherent manner.
 
-For this book, we will be using the JUnit unit testing framework.[^junit]  JUnit is an instance of the xUnit testing framework, which originally came from SUnit, a testing framework for Smalltalk.  As a side note, Smalltalk is one of those languages that was years ahead of its time.  If you want to see what the future of software engineering will be like, one of the best things to do is to go look at what cool features languages had twenty years ago that were considered too slow or too immature or too "academic".  Usually, these cool features will come back into vogue years later, with the community of whatever language they've ended up in loudly trumpeting their novelty (see: garbage collection, macros, metaprogramming).
+For this book, we will be using the minitest unit testing framework.  Minitest is a part of the Ruby standard library and operates in a very similar manner as most other unit testing frameworks such as JUnit or cppunit.
 
-[^junit]: Available from [http://junit.org](http://junit.org).
+The minitest test framework allows us to create unit tests that have much of the "behind-the-scenes" work taken care of.  The developer can then focus on generating the test logic and understanding what is being tested, instead of wasting time writing out conditionals printing "yay, test passed" or "boo, test failed".
 
-Fuddy-duddy rants aside, the JUnit test framework allows us to create unit tests that have much of the "behind-the-scenes" work taken care of.  The developer can then focus on generating the test logic and understanding what is being tested, instead of wasting time writing out conditionals printing "yay, test passed" or "boo, test failed".
-
-Although we will be covering JUnit, as it is a popular and easy-to-understand testing framework, it is far from the only unit testing framework in existence.  Among many other Java testing frameworks, there are TestNG, a more fully-featured framework; JTest, which includes the ability to automatically generate unit tests; and cucumber-jvm, which helps to write tests in a more human-readable format.  All of these have their benefits and drawbacks.  If you're interested in finding more potential unit testing frameworks, just do a web search for "unit testing frameworks _your language of choice_".
+Although we will be covering minitest, as it is a popular and easy-to-understand testing framework, it is far from the only unit testing framework in existence.  Among many other Ruby testing frameworks, these include rspec, Test::Unit, shoulda, and cucumber.  All of these have their benefits and drawbacks.  If you're interested in finding more potential unit testing frameworks, just do a web search for "unit testing frameworks _your language of choice_".
 
 Keep in mind, though, that the particular implementation of testing framework you use isn't nearly as important as the concepts you learn and can apply.  When you are reading this chapter, worry less about the syntax, and more about understanding the concepts of unit testing.  Think about how aspects of unit testing are both similar and different to concepts that you have already learned in manual testing.
 
 The following is an implementation of a unit test checking for linked list equality, as per above.  Don't worry if you don't understand all of the code; over the next few sections it will be explained thoroughly.
 
-```java
+```ruby
 import static org.junit.Assert.*;
 
 public class LinkedListTest {
@@ -137,7 +135,7 @@ public void testNoLispStuff() {
 }
 ```
 
-When your poem starts with "Behold", "Darling", or "Limpid", this test will pass.  However, it will also pass if the poem starts with "`%&*()_`" or "`java.lang.StackOverflowError`".  Tests should, in general, look for _positive_ behavior as opposed to the absence of _negative_ behavior.  Imagine testing that a "welcome" box does _not_ show up on a web page.  If the URL for the page returns a `500 Internal Server Error`, the test will still pass.  Think very carefully about failure cases when testing for the absence of a particular behavior.
+When your poem starts with "Behold", "Darling", or "Limpid", this test will pass.  However, it will also pass if the poem starts with "`%&*()_`" or "`StackOverflowError`".  Tests should, in general, look for _positive_ behavior as opposed to the absence of _negative_ behavior.  Imagine testing that a "welcome" box does _not_ show up on a web page.  If the URL for the page returns a `500 Internal Server Error`, the test will still pass.  Think very carefully about failure cases when testing for the absence of a particular behavior.
 
 ### Ensuring that Tests are Testing What You Expect
 

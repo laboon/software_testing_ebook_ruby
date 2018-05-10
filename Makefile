@@ -1,6 +1,6 @@
-TITLE=A Friendly Introduction\\\\to Software Testing
+TITLE=A Friendly Introduction\\\\to Software Testing\\\\(with Ruby)
 AUTHOR=Bill Laboon
-DEDICATION=for AKS and CKN
+DEDICATION=to Kathy Laboon
 
 
 # If pandoc or xelatex are not in your PATH, specify their locations here:
