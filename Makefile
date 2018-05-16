@@ -12,7 +12,7 @@ MD_FILES=	$(wildcard text/*.md)
 
 pdf:	main.tex tex_files
 # Uses date of most recent commit in repo
-	$(PANDOC) main.tex -o software-testing-laboon-ebook.pdf \
+	$(PANDOC) main.tex -o software-testing-ruby-laboon.pdf \
 		--pdf-engine $(XELATEX) \
 		--top-level-division=chapter \
 		--toc --toc-depth=2 \
